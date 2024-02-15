@@ -1,15 +1,37 @@
-## Put comments here that give an overall description of what your
-## functions do
-
-## Write a short comment describing this function
-
-makeCacheMatrix <- function(x = matrix()) {
-
+makeCacheMatrix <- function(matrix = matrix()) {
+  cache <- NULL
+  set <- function(matrixInput) {
+    matrix <<- matrixInput
+    cache$inverse <<- NULL
+  }
+  get <- function() {
+    matrix
+  }
+  setInverse <- function(inverse) {
+    cache$inverse <<- inverse
+  }
+  getInverse <- function() {
+    cache$inverse
+  }
+  
+  cache <- list(set = set,
+                get = get,
+                setInverse = setInverse,
+                getInverse = getInverse)
+  
+  cache
 }
 
+cacheSolve <- function(matrix, ...) {
+  inverse <- matrix$getInverse()
+  if (!is.null(inverse)) {
+    message("Getting cached inverse")
+    return(inverse)
+  }
+  mat <- matrix$get()
+  inverse <- solve(mat, ...)
+  
 
-## Write a short comment describing this function
-
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+  matrix$setInverse(inverse)
+  inverse
 }
